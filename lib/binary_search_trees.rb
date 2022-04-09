@@ -19,7 +19,7 @@ class Tree
 
     def insert(value)
         return if value == @root.data
-        explorer = locate_node(@root, value)
+        explorer = locate_node_for_insertion(@root, value)
         if value < explorer.data
             explorer.left_child = Node.new(value)
         else
@@ -27,8 +27,16 @@ class Tree
         end
     end
 
-    def delete()
-
+    def delete(value)
+        marked = locate_node_for_deletion(@root, value)
+        marked_parent = locate_parent_node(@root, marked)
+        if marked.left_child.nil? && marked.right_child.nil?
+            if marked_parent.left_child == marked
+                marked_parent.left_child = nil
+            else
+                marked_parent.right_child = nil
+            end
+        end
     end
 
     def find(value)
@@ -40,9 +48,32 @@ class Tree
         end
     end
 
-    def locate_node(explorer, value)
+    def locate_node_for_insertion(explorer, value)
         until explorer.left_child.nil? && explorer.right_child.nil?
             if value < explorer.data
+                explorer = explorer.left_child
+            else
+                explorer = explorer.right_child
+            end
+        end
+        explorer
+    end
+
+    def locate_node_for_deletion(explorer, value)
+        until explorer.data == value
+            if value < explorer.data
+                explorer = explorer.left_child
+            else
+                explorer = explorer.right_child
+            end
+        end
+        explorer
+    end
+
+
+    def locate_parent_node(explorer, child)
+        until explorer.left_child == child || explorer.right_child == child
+            if child.data < explorer.data
                 explorer = explorer.left_child
             else
                 explorer = explorer.right_child
@@ -97,6 +128,8 @@ tree = Tree.new(array)
 
 tree.pretty_print
 tree.insert(51)
+tree.pretty_print
+tree.delete(1)
 tree.pretty_print
 
 # array = (Array.new(15) { rand(1..100) }).uniq!
