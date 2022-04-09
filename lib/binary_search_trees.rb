@@ -29,25 +29,51 @@ class Tree
 
     def delete(value)
         marked = locate_node_for_deletion(@root, value)
-        marked_parent = locate_parent_node(@root, marked)
         if marked.left_child.nil? && marked.right_child.nil?
-            if marked_parent.left_child == marked
-                marked_parent.left_child = nil
-            else
-                marked_parent.right_child = nil
-            end
+            delete_child(marked)
         elsif !marked.left_child.nil? && !marked.right_child.nil?
-
+            delete_with_children(marked)
         else    
-            if marked.left_child.nil? && !marked.right_child.nil?
-                marked.data = marked.right_child.data
-                marked.right_child = nil
-            elsif !marked.left_child.nil? && marked.right_child.nil?
-                marked.data = marked.left_child.data
-                marked.left_child = nil
-            end
+            delete_with_child(marked)
         end
     end
+
+    def locate_minimum_right_sub_tree(marked)
+        until marked.left_child.nil?
+            marked = marked.right_child
+        end
+        marked
+    end
+
+    def delete_with_children(marked)
+        successor = locate_minimum_right_sub_tree(marked)
+        successor_parent = locate_parent_node(@root, successor)
+        marked.data = successor.data
+        successor_parent.right_child = nil
+    end
+
+    def delete_with_child(marked)
+        if marked.left_child.nil? && !marked.right_child.nil?
+            marked.data = marked.right_child.data
+            marked.right_child = nil
+        elsif !marked.left_child.nil? && marked.right_child.nil?
+            marked.data = marked.left_child.data
+            marked.left_child = nil
+        end
+    end
+
+    def delete_child(marked)
+        marked_parent = locate_parent_node(@root, marked)
+        if marked_parent.left_child == marked
+            marked_parent.left_child = nil
+        else
+            marked_parent.right_child = nil
+        end
+    end
+
+    # go right until left child is nil = save this node
+    # copy the value of the saved node into the marked node
+    # delete the saved node
 
     def find(value)
         explorer = @root
@@ -139,7 +165,7 @@ tree = Tree.new(array)
 tree.pretty_print
 tree.insert(31)
 tree.pretty_print
-tree.delete(32)
+tree.delete(12)
 tree.pretty_print
 
 # array = (Array.new(15) { rand(1..100) }).uniq!
