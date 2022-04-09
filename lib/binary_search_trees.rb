@@ -98,7 +98,6 @@ class Tree
         explorer
     end
 
-
     def locate_parent_node(explorer, child)
         until explorer.left_child == child || explorer.right_child == child
             if child.data < explorer.data
@@ -159,7 +158,7 @@ class Tree
     def inorder
         nodes = Array.new
         explorer = @root
-        depth_in(nodes, explorer)
+        dig_in(nodes, explorer)
         if block_given?
             yield(nodes)
         else
@@ -167,17 +166,17 @@ class Tree
         end
     end
 
-    def depth_in(nodes, explorer)
-        return if explorer == nil
-        depth_in(nodes, explorer.left_child)
+    def dig_in(nodes, explorer)
+        return if explorer.nil?
+        dig_in(nodes, explorer.left_child)
         nodes.push(explorer.data)
-        depth_in(nodes, explorer.right_child)
+        dig_in(nodes, explorer.right_child)
     end
 
     def preorder
         nodes = Array.new
         explorer = @root
-        depth_pre(nodes, explorer)
+        dig_pre(nodes, explorer)
         if block_given?
             yield(nodes)
         else
@@ -185,17 +184,17 @@ class Tree
         end
     end
 
-    def depth_pre(nodes, explorer)
-        return if explorer == nil
+    def dig_pre(nodes, explorer)
+        return if explorer.nil?
         nodes.push(explorer.data)
-        depth_in(nodes, explorer.left_child)
-        depth_in(nodes, explorer.right_child)
+        dig_pre(nodes, explorer.left_child)
+        dig_pre(nodes, explorer.right_child)
     end
 
     def postorder
         nodes = Array.new
         explorer = @root
-        depth_post(nodes, explorer)
+        dig_post(nodes, explorer)
         if block_given?
             yield(nodes)
         else
@@ -203,10 +202,10 @@ class Tree
         end
     end
 
-    def depth_post(nodes, explorer)
-        return if explorer == nil
-        depth_in(nodes, explorer.left_child)
-        depth_in(nodes, explorer.right_child)
+    def dig_post(nodes, explorer)
+        return if explorer.nil?
+        dig_post(nodes, explorer.left_child)
+        dig_post(nodes, explorer.right_child)
         nodes.push(explorer.data)
     end
 
@@ -228,6 +227,25 @@ class Tree
             explorer = explorer.right_child
             depth += 1
             depth_finding(explorer, value, depth)
+        end
+    end
+
+    def height(value)
+        jumps_all = Array.new
+        jumps = 0
+        dig_height(jumps_all, find(value), jumps)
+        height = jumps_all.max
+    end
+
+    def dig_height(jumps_all, explorer, jumps)
+        if explorer.nil?
+            return
+        elsif explorer.left_child.nil? && explorer.right_child.nil?
+            jumps_all.push(jumps)
+        else
+            jumps += 1
+            dig_height(jumps_all, explorer.left_child, jumps)
+            dig_height(jumps_all, explorer.right_child, jumps)
         end
     end
 
@@ -257,9 +275,13 @@ tree = Tree.new(array)
 #     end
 #     puts node.join(", ")
 # }
-tree.pretty_print
+# tree.pretty_print
 # tree.level_order(&double)
 # tree.level_order
+tree.insert(31)
+tree.insert(30)
+tree.pretty_print
+puts tree.height(12)
 
 
 # array = (Array.new(15) { rand(1..100) }).uniq!
