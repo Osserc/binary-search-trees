@@ -160,7 +160,11 @@ class Tree
         nodes = Array.new
         explorer = @root
         depth_in(nodes, explorer)
-        puts nodes.join(", ")
+        if block_given?
+            yield(nodes)
+        else
+            puts nodes.join(", ")
+        end
     end
 
     def depth_in(nodes, explorer)
@@ -174,7 +178,11 @@ class Tree
         nodes = Array.new
         explorer = @root
         depth_pre(nodes, explorer)
-        puts nodes.join(", ")
+        if block_given?
+            yield(nodes)
+        else
+            puts nodes.join(", ")
+        end
     end
 
     def depth_pre(nodes, explorer)
@@ -188,7 +196,11 @@ class Tree
         nodes = Array.new
         explorer = @root
         depth_post(nodes, explorer)
-        puts nodes.join(", ")
+        if block_given?
+            yield(nodes)
+        else
+            puts nodes.join(", ")
+        end
     end
 
     def depth_post(nodes, explorer)
