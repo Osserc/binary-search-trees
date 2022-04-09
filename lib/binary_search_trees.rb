@@ -71,10 +71,6 @@ class Tree
         end
     end
 
-    # go right until left child is nil = save this node
-    # copy the value of the saved node into the marked node
-    # delete the saved node
-
     def find(value)
         return @root if @root.data == value
         children_confront_find(@root, value)
@@ -137,6 +133,29 @@ class Tree
         end
     end
 
+    def breadth_first
+        queue = Array.new
+        nodes = Array.new
+        explorer = @root
+        loop do
+            queue.push(explorer.left_child).push(explorer.right_child).compact!
+            nodes.push(explorer.data)
+            explorer = queue[0]
+            break if queue.empty?
+            queue.shift
+        end
+        nodes
+    end
+
+    def level_order
+        nodes = self.breadth_first
+        if block_given?
+            yield(nodes)
+        else
+            puts nodes.join(", ")
+        end
+    end
+
     def pretty_print(node = @root, prefix = '', is_left = true)
         pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
         puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -157,8 +176,16 @@ end
 
 array = [1, 4, 8, 12, 32, 56, 78, 97, 121, 135, 245, 321, 654, 786, 981]
 tree = Tree.new(array)
-
+double = Proc.new { | node |
+    node.map! do | element |
+        element *= 2
+    end
+    puts node.join(", ")
+}
 tree.pretty_print
+tree.level_order(&double)
+tree.level_order
+
 
 
 # array = (Array.new(15) { rand(1..100) }).uniq!
