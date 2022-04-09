@@ -17,6 +17,13 @@ class Tree
         Node.new(array[mid], build_tree(left_array), build_tree(right_array))
     end
 
+
+    def pretty_print(node = @root, prefix = '', is_left = true)
+        pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
+        puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
+        pretty_print(node.left_child, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left_child
+    end
+
 end
 
 class Node
@@ -31,15 +38,8 @@ end
 
 array = [1, 4, 8, 12, 32, 56, 78, 97, 121, 135, 245, 321, 654, 786, 981]
 tree = Tree.new(array)
-puts tree.root.data
 
+
+tree.pretty_print
 
 # array = (Array.new(15) { rand(1..100) }).uniq!
-
-# initialize start = 0
-# end = array.length - 1
-# mid = (start + end) / 2
-# create a tree node with middle root as A
-# recursively do these two steps
-#     calculate mid of left subarray and make it root of left subtree of a
-#     calculate mid of right subarray and make it root of right subtree of a
