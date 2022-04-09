@@ -17,6 +17,39 @@ class Tree
         Node.new(array[mid], build_tree(left_array), build_tree(right_array))
     end
 
+    def find(value)
+        explorer = root_confront(value)
+        if explorer.data == value
+            return true
+        else
+            children_confront(explorer, value)
+        end
+    end
+
+    def root_confront(value)
+        if @root.data == value
+            explorer = @root
+        elsif value < @root.data
+            explorer = @root.left_child
+        else
+            explorer = @root.right_child
+        end
+    end
+
+    def children_confront(explorer, value)
+        if explorer == nil
+            return false
+        elsif explorer.data == value
+            return true
+        elsif value < explorer.data
+            explorer = explorer.left_child
+            children_confront(explorer, value)
+        else
+            explorer = explorer.right_child
+            children_confront(explorer, value)
+        end
+    end
+
 
     def pretty_print(node = @root, prefix = '', is_left = true)
         pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
@@ -41,5 +74,6 @@ tree = Tree.new(array)
 
 
 tree.pretty_print
+puts tree.find(6)
 
 # array = (Array.new(15) { rand(1..100) }).uniq!
