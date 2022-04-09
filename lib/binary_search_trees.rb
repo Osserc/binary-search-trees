@@ -36,6 +36,16 @@ class Tree
             else
                 marked_parent.right_child = nil
             end
+        elsif !marked.left_child.nil? && !marked.right_child.nil?
+
+        else    
+            if marked.left_child.nil? && !marked.right_child.nil?
+                marked.data = marked.right_child.data
+                marked.right_child = nil
+            elsif !marked.left_child.nil? && marked.right_child.nil?
+                marked.data = marked.left_child.data
+                marked.left_child = nil
+            end
         end
     end
 
@@ -127,9 +137,9 @@ tree = Tree.new(array)
 
 
 tree.pretty_print
-tree.insert(51)
+tree.insert(31)
 tree.pretty_print
-tree.delete(1)
+tree.delete(32)
 tree.pretty_print
 
 # array = (Array.new(15) { rand(1..100) }).uniq!
