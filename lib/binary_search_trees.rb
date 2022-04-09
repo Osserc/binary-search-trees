@@ -210,6 +210,27 @@ class Tree
         nodes.push(explorer.data)
     end
 
+    def depth(value)
+        depth = 0
+        explorer = @root
+        return depth if explorer.data == value
+        depth = depth_finding(explorer, value, depth)
+    end
+
+    def depth_finding(explorer, value, depth)
+        if value == explorer.data
+            return depth
+        elsif value < explorer.data
+            explorer = explorer.left_child
+            depth += 1
+            depth_finding(explorer, value, depth)
+        elsif
+            explorer = explorer.right_child
+            depth += 1
+            depth_finding(explorer, value, depth)
+        end
+    end
+
     def pretty_print(node = @root, prefix = '', is_left = true)
         pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
         puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -239,9 +260,6 @@ tree = Tree.new(array)
 tree.pretty_print
 # tree.level_order(&double)
 # tree.level_order
-tree.inorder
-tree.preorder
-tree.postorder
 
 
 # array = (Array.new(15) { rand(1..100) }).uniq!
