@@ -19,11 +19,11 @@ class Tree
 
     def insert(value)
         return if value == @root.data
-        explorer == @root
+        explorer = locate_node(@root, value)
         if value < explorer.data
-            explorer = explorer.left_child
+            explorer.left_child = Node.new(value)
         else
-            explorer = explorer.right_child
+            explorer.right_child = Node.new(value)
         end
     end
 
@@ -36,21 +36,32 @@ class Tree
         if explorer.data == value
             return true
         else
-            children_confront(explorer, value)
+            children_confront_find(explorer, value)
         end
     end
 
-    def children_confront(explorer, value)
+    def locate_node(explorer, value)
+        until explorer.left_child.nil? && explorer.right_child.nil?
+            if value < explorer.data
+                explorer = explorer.left_child
+            else
+                explorer = explorer.right_child
+            end
+        end
+        explorer
+    end
+
+    def children_confront_find(explorer, value)
         if data_check(explorer, value)
             return true
         elsif data_check(explorer, value) == false
             return false
         elsif value < explorer.data
             explorer = explorer.left_child
-            children_confront(explorer, value)
+            children_confront_find(explorer, value)
         elsif
             explorer = explorer.right_child
-            children_confront(explorer, value)
+            children_confront_find(explorer, value)
         end
     end
 
@@ -85,6 +96,7 @@ tree = Tree.new(array)
 
 
 tree.pretty_print
-puts tree.find(18)
+tree.insert(51)
+tree.pretty_print
 
 # array = (Array.new(15) { rand(1..100) }).uniq!
