@@ -28,7 +28,7 @@ class Tree
     end
 
     def delete(value)
-        marked = locate_node_for_deletion(@root, value)
+        marked = locate_node(@root, value)
         if marked.left_child.nil? && marked.right_child.nil?
             delete_child(marked)
         elsif !marked.left_child.nil? && !marked.right_child.nil?
@@ -76,12 +76,8 @@ class Tree
     # delete the saved node
 
     def find(value)
-        explorer = @root
-        if explorer.data == value
-            return true
-        else
-            children_confront_find(explorer, value)
-        end
+        return @root if @root.data == value
+        children_confront_find(@root, value)
     end
 
     def locate_node_for_insertion(explorer, value)
@@ -95,7 +91,7 @@ class Tree
         explorer
     end
 
-    def locate_node_for_deletion(explorer, value)
+    def locate_node(explorer, value)
         until explorer.data == value
             if value < explorer.data
                 explorer = explorer.left_child
@@ -120,9 +116,10 @@ class Tree
 
     def children_confront_find(explorer, value)
         if data_check(explorer, value)
-            return true
+            return explorer
         elsif data_check(explorer, value) == false
-            return false
+            puts "There is no node with a value of #{value}"
+            return
         elsif value < explorer.data
             explorer = explorer.left_child
             children_confront_find(explorer, value)
@@ -161,11 +158,7 @@ end
 array = [1, 4, 8, 12, 32, 56, 78, 97, 121, 135, 245, 321, 654, 786, 981]
 tree = Tree.new(array)
 
+tree.pretty_print
 
-tree.pretty_print
-tree.insert(31)
-tree.pretty_print
-tree.delete(12)
-tree.pretty_print
 
 # array = (Array.new(15) { rand(1..100) }).uniq!
