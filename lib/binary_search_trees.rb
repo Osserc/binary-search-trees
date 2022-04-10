@@ -138,7 +138,7 @@ class Tree
         explorer = @root
         loop do
             queue.push(explorer.left_child).push(explorer.right_child).compact!
-            nodes.push(explorer.data)
+            nodes.push(explorer)
             explorer = queue[0]
             break if queue.empty?
             queue.shift
@@ -151,7 +151,7 @@ class Tree
         if block_given?
             yield(nodes)
         else
-            puts nodes.join(", ")
+            default_traversing_output(nodes)
         end
     end
 
@@ -162,14 +162,14 @@ class Tree
         if block_given?
             yield(nodes)
         else
-            puts nodes.join(", ")
+            default_traversing_output(nodes)
         end
     end
 
     def dig_in(nodes, explorer)
         return if explorer.nil?
         dig_in(nodes, explorer.left_child)
-        nodes.push(explorer.data)
+        nodes.push(explorer)
         dig_in(nodes, explorer.right_child)
     end
 
@@ -180,13 +180,13 @@ class Tree
         if block_given?
             yield(nodes)
         else
-            puts nodes.join(", ")
+            default_traversing_output(nodes)
         end
     end
 
     def dig_pre(nodes, explorer)
         return if explorer.nil?
-        nodes.push(explorer.data)
+        nodes.push(explorer)
         dig_pre(nodes, explorer.left_child)
         dig_pre(nodes, explorer.right_child)
     end
@@ -198,7 +198,7 @@ class Tree
         if block_given?
             yield(nodes)
         else
-            puts nodes.join(", ")
+            default_traversing_output(nodes)
         end
     end
 
@@ -206,7 +206,12 @@ class Tree
         return if explorer.nil?
         dig_post(nodes, explorer.left_child)
         dig_post(nodes, explorer.right_child)
-        nodes.push(explorer.data)
+        nodes.push(explorer)
+    end
+
+    def default_traversing_output(nodes)
+        nodes.map! { | node | node = node.data }
+        puts nodes.join(", ")
     end
 
     def depth(value)
@@ -269,19 +274,21 @@ end
 
 array = [1, 4, 8, 12, 32, 56, 78, 97, 121, 135, 245, 321, 654, 786, 981]
 tree = Tree.new(array)
-# double = Proc.new { | node |
-#     node.map! do | element |
-#         element *= 2
-#     end
-#     puts node.join(", ")
-# }
-# tree.pretty_print
-# tree.level_order(&double)
-# tree.level_order
-tree.insert(31)
-tree.insert(30)
+double = Proc.new { | node |
+    node.map! do | element |
+        element.data *= 2
+    end
+    puts node.join(", ")
+}
 tree.pretty_print
-puts tree.height(12)
+tree.level_order(&double)
+# tree.level_order
+# tree.pretty_print
+# puts tree.height(12)
+# tree.insert(31)
+# tree.insert(30)
+# tree.pretty_print
+# puts tree.height(12)
 
 
 # array = (Array.new(15) { rand(1..100) }).uniq!
