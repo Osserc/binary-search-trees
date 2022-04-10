@@ -269,7 +269,7 @@ class Tree
                 elsif node.right_child.nil?
                     height_diff_array.push(height(node.data))
                 else
-                    height_diff_array.push(height(node.left_child.data.to_i) - height(node.right_child.data.to_i))
+                    height_diff_array.push(height(node.left_child.data) - height(node.right_child.data))
                 end
             end
         end
@@ -297,33 +297,29 @@ class Node
     end
 end
 
-
-array = [1, 4, 8, 12, 32, 56, 78, 97, 121, 135, 245, 321, 654, 786, 981]
+array = Array.new(15) { rand(1..100) }.uniq.sort
 tree = Tree.new(array)
-# double = Proc.new { | node |
-#     node.map! do | element |
-#         element.data *= 2
-#     end
-#     puts node.join(", ")
-# }
-# tree.pretty_print
-# tree.level_order(&double)
-# tree.level_order
-# tree.pretty_print
-# puts tree.height(12)
 puts tree.balanced?
-tree.insert(31)
-puts tree.balanced?
-tree.insert(30)
-tree.pretty_print
+puts "Level order:"
+puts tree.level_order
+puts "Preorder:"
+puts tree.preorder
+puts "Inorder:"
+puts tree.inorder
+puts "Postorder:"
+puts tree.postorder
+tree.insert(101)
+tree.insert(102)
+tree.insert(103)
+tree.insert(104)
 puts tree.balanced?
 tree.rebalance
-tree.pretty_print
 puts tree.balanced?
-
-# tree.pretty_print
-# puts tree.height(12)
-
-
-
-# array = (Array.new(15) { rand(1..100) }).uniq!
+puts "Level order:"
+puts tree.level_order
+puts "Preorder:"
+puts tree.preorder
+puts "Inorder:"
+puts tree.inorder
+puts "Postorder:"
+puts tree.postorder
