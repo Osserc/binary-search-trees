@@ -275,6 +275,11 @@ class Tree
         end
     end
 
+    def rebalance
+        array = breadth_first.map { | node | node = node.data}.sort
+        @root = build_tree(array) if !self.balanced?
+    end
+
     def pretty_print(node = @root, prefix = '', is_left = true)
         pretty_print(node.right_child, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_child
         puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -306,8 +311,16 @@ tree = Tree.new(array)
 # tree.level_order
 # tree.pretty_print
 # puts tree.height(12)
-# tree.insert(31)
-# tree.insert(30)
+puts tree.balanced?
+tree.insert(31)
+puts tree.balanced?
+tree.insert(30)
+tree.pretty_print
+puts tree.balanced?
+tree.rebalance
+tree.pretty_print
+puts tree.balanced?
+
 # tree.pretty_print
 # puts tree.height(12)
 
